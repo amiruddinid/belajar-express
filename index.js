@@ -2,6 +2,7 @@ const express = require("express");
 const app = express();
 const Book = require("./book");
 const upload = require("./middleware/upload");
+const cloudinary = require("./config/cloudinary");
 const { PORT = 8000 } = process.env;
 
 //Book.js tambahkan module.exports = Book
@@ -60,7 +61,25 @@ app.post('/api/v1/upload/', upload.single("picture"), (req, res) => {
     res
       .status(200)
       .json({ message: "Foto berhasil di-upload, silahkan cek URL", url });
+})
 
+app.post('/api/v1/upload/cloudinary', upload.single("picture"), (req, res) => {
+    const fileBase64 = req.file.buffer.toString("base64")
+    const file = `data:${req.file.mimetype};base64,${fileBase64}`
+    
+    cloudinary.uploader.upload(file, (err, result) => {
+        if(!!err){
+            console.log(err)
+            return res.status(400).json({
+                message: "Gagal upload file"
+            })
+        }
+
+        res.status(201).json({
+            message: "Upload file berhasil",
+            url: result.url
+        })
+    })
 })
 
 app.use((req, res) => {
