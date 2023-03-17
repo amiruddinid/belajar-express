@@ -1,7 +1,8 @@
 const express = require("express");
 const app = express();
 const Book = require("./book");
-const upload = require("./middleware/upload");
+const uploadMemory = require("./middleware/uploadMemory");
+const uploadDisk = require("./middleware/uploadDisk")
 const cloudinary = require("./config/cloudinary");
 const { PORT = 8000 } = process.env;
 
@@ -56,14 +57,14 @@ app.delete('/api/v1/books/:id', (req, res) => {
     res.status(204).end();
 })
 // upload
-app.post('/api/v1/upload/', upload.single("picture"), (req, res) => {
+app.post('/api/v1/upload/', uploadDisk.single("picture"), (req, res) => {
     const url = `/uploads/${req.file.filename}`;
     res
       .status(200)
       .json({ message: "Foto berhasil di-upload, silahkan cek URL", url });
 })
 
-app.post('/api/v1/upload/cloudinary', upload.single("picture"), (req, res) => {
+app.post('/api/v1/upload/cloudinary', uploadMemory.single("picture"), (req, res) => {
     const fileBase64 = req.file.buffer.toString("base64")
     const file = `data:${req.file.mimetype};base64,${fileBase64}`
     
