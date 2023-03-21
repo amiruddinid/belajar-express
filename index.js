@@ -4,6 +4,7 @@ const Book = require("./book");
 const uploadMemory = require("./middleware/uploadMemory");
 const uploadDisk = require("./middleware/uploadDisk")
 const cloudinary = require("./config/cloudinary");
+const Motors = require("./motor");
 const { PORT = 8000 } = process.env;
 
 //Book.js tambahkan module.exports = Book
@@ -16,9 +17,17 @@ app.use(express.json())
 
 
 //list
-app.get('/api/v1/books', (req, res) => {
-    const books = Book.list();
-    res.status(200).json(books)
+app.get('/api/v1/motors', async (req, res) => {
+    try {
+        const motors = await Motors.list();
+        res.status(200).json(motors)
+    } catch (error) {
+        res.status(400).json({
+            message: "Error",
+            data: error
+        })
+    }
+    
 })
 //detail
 app.get('/api/v1/books/:id', (req, res) => {
@@ -29,12 +38,20 @@ app.get('/api/v1/books/:id', (req, res) => {
     res.status(200).json(book)
 })
 //create
-app.post('/api/v1/books', (req, res) => {
-    const books = Book.create(req.body);
-    res.status(201).json({
-        message: "Sukses",
-        data: books
-    })
+app.post('/api/v1/motors', async (req, res) => {
+    try {
+        const motors = await Motors.create(req.body);
+        res.status(201).json({
+            message: "Sukses",
+            data: motors
+        })
+    } catch (error) {
+        res.status(400).json({
+            message: "Error",
+            data: error
+        })
+    }
+    
 })
 // update / edit
 app.put('/api/v1/books/:id', (req, res) => {
