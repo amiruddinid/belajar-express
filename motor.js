@@ -1,6 +1,6 @@
 const { Motor } = require('./models')
 
-class Motors {
+class MotorController {
     static records = [];
   
     constructor(params) {
@@ -11,8 +11,8 @@ class Motors {
     }
 
     static create(params) {
-        const motor = new this(params);
-        const result = Motor.create(motor)
+        const obj = new this(params);
+        const result = Motor.create(obj)
     
         return result;
     }
@@ -21,39 +21,34 @@ class Motors {
         const result = Motor.findAll()
         return result;
     }
-    
-    update(params) {
-      const idx = this.constructor.records.findIndex((i) => i.id === this.id);
-  
-      params.title && (this.title = params.title);
-      params.coverImage && (this.coverImage = params.coverImage);
-      params.synopsis && (this.synopsis = params.synopsis);
-      params.publisher && (this.publisher = params.publisher);
-      params.author && (this.author = params.author);
-      params.price && (this.price = params.price);
-  
-      this.constructor.records[idx] = this;
-  
-      return this;
-    }
-  
-    delete() {
-      this.constructor.records = this.constructor.records.filter(
-        (i) => i.id !== this.id
-      );
-    }
-  
-    
-  
+
     static find(id) {
-      const book = this.records.find((i) => i.id === Number(id));
-      if (!book) return null;
+        const result = Motor.findByPk(id)
+    
+        return result;
+    }
+    
+    static update(id, params) {
+      const result = Motor.update(params, 
+        {
+          where:{
+            id:id
+          }
+        }
+      )
   
-      return book;
+      return result;
     }
   
-    
+    static delete(id) {
+      const result = Motor.destroy({
+        where: { id:id }
+      })
+
+      return result
+    }
+  
   }
   
-module.exports = Motors;
+module.exports = MotorController;
   
