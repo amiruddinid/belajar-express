@@ -1,4 +1,4 @@
-const { Motor } = require('./models')
+const { Motor } = require('./app/models')
 
 class MotorController {
     static records = [];
