@@ -1,8 +1,8 @@
 const express = require("express");
 const app = express();
 const Book = require("./book");
-const uploadMemory = require("./middleware/uploadMemory");
-const uploadDisk = require("./middleware/uploadDisk")
+const uploadMemory = require("./app/middleware/uploadMemory");
+const uploadDisk = require("./app/middleware/uploadDisk")
 const cloudinary = require("./config/cloudinary");
 const MotorController = require("./motor");
 const { PORT = 8000 } = process.env;
