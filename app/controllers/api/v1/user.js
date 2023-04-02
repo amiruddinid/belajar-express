@@ -20,15 +20,7 @@ module.exports = {
       });
       return res.status(201).json({
         status: "OK",
-        data: {
-            id: user.id,
-            firstName: user.firstName,
-            lastName: user.lastName,
-            email: user.email,
-            password: user.password,
-            createdAt: user.createdAt,
-            updatedAt: user.updatedAt
-        },
+        data: user,
       });
     } catch (e) {
       res.status(400).json({
