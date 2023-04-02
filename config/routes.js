@@ -12,6 +12,8 @@ apiRouter.put("/api/v1/motors/:id", controllers.api.v1.motor.setMotor, controlle
 apiRouter.get("/api/v1/motors/:id", controllers.api.v1.motor.setMotor, controllers.api.v1.motor.show);
 apiRouter.delete("/api/v1/motors/:id",controllers.api.v1.motor.setMotor, controllers.api.v1.motor.destroy);
 
+apiRouter.post("/api/v1/users/register", controllers.api.v1.user.register);
+
 apiRouter.use(controllers.api.main.onLost);
 apiRouter.use(controllers.api.main.onError);
 
