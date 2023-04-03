@@ -2,7 +2,7 @@ const { User } = require("../../../models");
 const {
   checkPassword,
   encryptPassword,
-} = require("../../../../utils/password");
+} = require("../../../../utils/auth");
 
 module.exports = {
   login(req, res) {},
