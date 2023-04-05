@@ -1,0 +1,226 @@
+openapi: 3.0.3
+info:
+  title: Rental Mobil - OpenAPI 3.0
+  description: |-
+   Dokumentasi untuk API Rental Mobil
+  contact:
+    email: apiteam@swagger.io
+  version: 1.0.0
+servers:
+  - url: http://localhost:8000/api/v1
+  - url: http://rental-mobil.xyz
+tags:
+  - name: motor
+    description: Everything about your motors
+  - name: auth
+    description: Authentication
+paths:
+  /motors:
+    get:
+      tags:
+        - motor
+      summary: Get all motor data
+      description: Listing all motor data
+      operationId: getMotors
+      responses:
+        '200':
+          $ref: '#/components/responses/Motors'
+        '404':
+          description: Motors not found
+        '500':
+          description: Internal server error
+    post:
+      tags:
+        - motor
+      summary: Add a new motor to database
+      description: Add a new motor to database
+      operationId: createMotor
+      requestBody:
+        description: Create a motor in the database
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Motor'
+        required: true
+      responses:
+        '200':
+          $ref: '#/components/responses/Motor' 
+        '405':
+          description: Invalid input
+      security:
+        - bearerAuth: []
+  /motors/{id}:
+    get:
+      tags:
+        - motor
+      summary: Find motor by ID
+      description: Returns a single motor
+      operationId: getMotorById
+      parameters:
+        - name: id
+          in: path
+          description: ID of motor to return
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '200':
+          $ref: '#/components/responses/Motor'
+        '400':
+          description: Invalid ID supplied
+        '404':
+          description: Pet not found
+    put:
+      tags:
+        - motor
+      summary: Updates a motor in the store with form data
+      description: ''
+      operationId: updateMotorWithForm
+      parameters:
+        - name: id
+          in: path
+          description: ID of motor that needs to be updated
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '200':
+          $ref: '#/components/responses/Motor'
+        '405':
+          description: Invalid input
+      security:
+        - bearerAuth: []
+    delete:
+      tags:
+        - motor
+      summary: Deletes a motor
+      description: delete a motor
+      operationId: deleteMotor
+      parameters:
+        - name: id
+          in: path
+          description: Motor id to delete
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '204':
+          description: No Content
+        '400':
+          description: Invalid id value
+      security:
+        - bearerAuth: []
+  /auth/login:
+    post:
+      tags:
+        - auth
+      summary: Login
+      description: Login
+      operationId: login
+      requestBody:
+        description: Login
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                email:
+                  type: string
+                  example: example@gmail.com
+                password:
+                  type: string
+                  example: Password1!
+        required: true
+      responses:
+        '200':
+          description: berhasil login
+        '405':
+          description: Invalid input
+components:
+  schemas:
+    Motor:
+      required:
+        - model
+        - manufactur
+      type: object
+      properties:
+        model:
+          type: string
+          example: ZX25R
+        manufactur:
+          type: string
+          example: Kawasaki
+        foto:
+          type: string
+          example: http://example.com/zx25r.jpg
+        harga_sewa:
+          type: number
+          example: 100000
+  requestBodies:
+    Motor:
+      description: Motor object
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Motor'
+  responses:
+    Motor:
+      description: Motor object
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              status:
+                type: string
+                example: OK
+              data:
+                allOf:
+                  - $ref: '#/components/schemas/Motor'
+                  - type: object 
+                    properties:
+                      id:
+                        type: integer
+                        format: int64
+                        example: 10
+                      createdAt:
+                        type: string
+                        format: date-time
+                      updateAt:
+                        type: string
+                        format: date-time
+    Motors:
+      description: Motor list
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              status:
+                type: string
+                example: OK
+              data:
+                type: array
+                items:
+                  allOf:
+                  - $ref: '#/components/schemas/Motor'
+                  - type: object 
+                    properties:
+                      id:
+                        type: integer
+                        format: int64
+                        example: 10
+                      createdAt:
+                        type: string
+                        format: date-time
+                      updateAt:
+                        type: string
+                        format: date-time
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT

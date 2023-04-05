@@ -21,7 +21,7 @@ async function checkPassword(password, encryptedPassword){
 }
 
 function createToken(payload) {
-    return jwt.sign(payload, process.env.JWT_SIGNATURE_KEY || "Rahasia");
+    return jwt.sign(payload, process.env.JWT_SIGNATURE_KEY || "Rahasia", { expiresIn: '1800s' });
 }
 
 module.exports = {

@@ -86,6 +86,7 @@ module.exports = {
         req.user = await User.findByPk(tokenPayload.id);
         next();
     } catch(e) {
+        console.log(e)
         res.status(401).json({
             message: 'Unauthorized'
         })
