@@ -1,11 +1,14 @@
 const express = require("express");
 const morgan = require("morgan");
+const cors = require("cors")
 const path = require("path");
 const router = require("../config/routes");
 
 const publicDir = path.join(__dirname, "../public");
 const viewsDir = path.join(__dirname, "./views");
 const app = express();
+
+app.use(cors())
 
 /** Install request logger */
 app.use(morgan("dev"));
